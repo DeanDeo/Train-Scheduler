@@ -25,19 +25,70 @@ var config = {
     //creates "temporary" object for holding train data
     var newTrain = {
         train: trainName,
-        Destination: trainDestination,
+        destination: trainDestination,
         start: trainTime,
-        Frequency: trainFreq,
+        frequency: trainFreq,
     };
 
     //uploads train data to the database
     database.ref().push(newTrain);
 
     //logs to console
-    console.log(newTrain.trainName);
-    console.log(newTrain.trainDestination);
-    console.log(newTrain.trainTime);
-    console.log(newTrain.trainFreq);
+    console.log(newTrain.train);
+    console.log(newTrain.destination);
+    console.log(newTrain.start);
+    console.log(newTrain.frequency);
 
-    
-  }
+    alert("Train successfully added");
+
+    //clears all of the text boxes
+    $("#train-name-input").val("");
+    $("#place-input").val("");
+    $("#start-input").val("");
+    $("#frequency-input").val("");
+
+});
+
+    //create firebase event for adding train to database and a row in the html when a user adds an entry
+    database.ref().on("child_added", function(childSnapshot) {
+        console.log(childSnapshot.val());
+
+        //store everything into a variable
+        var trainName = childSnapshot.val().train;
+        var trainDestination = childSnapshot.val().destination;
+        var trainTime = childSnapshot.val().start;
+        var trainFreq = childSnapshot.val().frequency;
+
+        //employee info
+        console.log(trainName);
+        console.log(trainDestination);
+        console.log(trainTime);
+        console.log(trainFreq);
+
+        //prettify first train time so users on different machines can view
+        var empStartPretty = moment.unix(trainTime).format("HH:mm")
+
+
+        //calculate when the next train will arrive
+        var nextArrival = moment().diff(moment(trainTime, "X"),"HH:mm");
+        console.log(nextArrival);
+
+        //calculate how many minutes the train is away
+        var minAway = nextArrival - trainTime;
+        console.log(minAway);
+
+        //creat new row
+
+        var newRow = $("<tr>").append(
+            $("<td>").text(trainName),
+            $("<td>").text(trainDestination),
+            $("<td>").text(trainFreq),
+            $("<td>").text(nextArrival),
+            $("<td>").text(minAway),
+        );
+
+        //append the new row to the table
+        $("Train-table > tbody").append(newRow);
+
+    });
+  
