@@ -59,22 +59,22 @@ var config = {
         var trainTime = childSnapshot.val().start;
         var trainFreq = childSnapshot.val().frequency;
 
-        //employee info
+        //train info
         console.log(trainName);
         console.log(trainDestination);
         console.log(trainTime);
         console.log(trainFreq);
 
         //prettify first train time so users on different machines can view
-        var empStartPretty = moment.unix(trainTime).format("HH:mm")
+        var trainStartPretty = moment.unix(trainTime).format("HH:mm");
 
 
         //calculate when the next train will arrive
-        var nextArrival = moment().diff(moment(trainTime, "X"),"HH:mm");
+        var nextArrival = moment().diff(moment(trainTime, "minutes"),"HH:mm");
         console.log(nextArrival);
 
         //calculate how many minutes the train is away
-        var minAway = nextArrival - trainTime;
+        var minAway = trainFreq - tRemainder;
         console.log(minAway);
 
         //creat new row
@@ -84,11 +84,11 @@ var config = {
             $("<td>").text(trainDestination),
             $("<td>").text(trainFreq),
             $("<td>").text(nextArrival),
-            $("<td>").text(minAway),
+            $("<td>").text(minAway)
         );
 
         //append the new row to the table
-        $("Train-table > tbody").append(newRow);
+        $("#Train-table > tbody").append(newRow);
 
     });
   
