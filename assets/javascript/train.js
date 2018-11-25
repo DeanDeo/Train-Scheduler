@@ -22,12 +22,49 @@ var config = {
     var trainTime = $("#start-input").val().trim();
     var trainFreq = $("#frequency-input").val().trim();
 
+    console.log(trainName);
+	console.log(trainDestination);
+	console.log(trainTime);
+    console.log(trainFreq);
+    
+            //prettify first train time so users on different machines can view
+            var trainStartPretty = moment.unix(trainTime).format("HH:mm");
+
+
+            //calculate when the next train will arrive, start 1 year back to ensure it comes before current time
+            var trainTimeConverted = moment(trainTime, "HH:mm").subtract(1, "years");
+            console.log(trainTimeConverted);
+    
+            // current time
+            var currentTime = moment();
+            console.log("Current Time: " + moment(currentTime).format("hh:mm"));
+    
+            // difference between times
+            var diffTime = moment().diff(moment(trainTimeConverted), "minutes");
+            console.log("Difference in time: " + diffTime);
+    
+            //time apart
+            var tRemainder = diffTime % trainFreq;
+            console.log(tRemainder)
+    
+            //mins until next train
+            var minAway = trainFreq - tRemainder;
+            console.log("Minutes until train: " + minAway);
+    
+            //next train
+            var nextArrival = moment().add(minAway, "minutes").format("hh:mm A");
+            console.log("Arrival Time: " + moment(nextArrival).format("hh:mm")); 
+
     //creates "temporary" object for holding train data
     var newTrain = {
         train: trainName,
         destination: trainDestination,
         start: trainTime,
         frequency: trainFreq,
+        arrival: nextArrival,
+        minutes: minAway,
+        current: currentTime.format("hh:mm")
+
     };
 
     //uploads train data to the database
@@ -38,6 +75,9 @@ var config = {
     console.log(newTrain.destination);
     console.log(newTrain.start);
     console.log(newTrain.frequency);
+    console.log(newTrain.arrival);
+    console.log(newTrain.minutes);
+    console.log(newTrain.current);
 
     alert("Train successfully added");
 
@@ -58,24 +98,20 @@ var config = {
         var trainDestination = childSnapshot.val().destination;
         var trainTime = childSnapshot.val().start;
         var trainFreq = childSnapshot.val().frequency;
+        var nextArrival = childSnapshot.val().arrival;
+        var minAway = childSnapshot.val().minutes;
+        var currentTime = childSnapshot.val().current;
+
 
         //train info
         console.log(trainName);
         console.log(trainDestination);
         console.log(trainTime);
         console.log(trainFreq);
-
-        //prettify first train time so users on different machines can view
-        var trainStartPretty = moment.unix(trainTime).format("HH:mm");
-
-
-        //calculate when the next train will arrive
-        var nextArrival = moment().diff(moment(trainTime, "minutes"),"HH:mm");
         console.log(nextArrival);
-
-        //calculate how many minutes the train is away
-        var minAway = trainFreq - tRemainder;
         console.log(minAway);
+        console.log(currentTime);
+
 
         //creat new row
 
