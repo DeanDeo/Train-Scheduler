@@ -27,8 +27,7 @@ var config = {
 	console.log(trainTime);
     console.log(trainFreq);
     
-            //prettify first train time so users on different machines can view
-            var trainStartPretty = moment.unix(trainTime).format("HH:mm");
+
 
 
             //calculate when the next train will arrive, start 1 year back to ensure it comes before current time
