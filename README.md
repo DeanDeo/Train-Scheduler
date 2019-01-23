@@ -1,4 +1,4 @@
-# Train-Scheduler
+# Train-Scheduler uses Javascript for the logic and Jquery to manipulate the HTML. The data is stored in a Firebase database.
 
 This app will show you real time train arrivals based on your input of "Train Name" 'Destination" "First train time" and "Frequency" of the train.
 
